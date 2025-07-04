@@ -34,5 +34,20 @@
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
+  <script>
+    window.addEventListener('load', function() {
+      const observer = new MutationObserver(function(_, obs) {
+        const elements = Array.from(document.querySelectorAll('*'));
+        const sensorNode = elements.find(el => el.textContent && el.textContent.trim() === 'Sensor Values');
+        if (sensorNode && sensorNode.parentNode) {
+          const thomas = sensorNode.cloneNode(true);
+          thomas.textContent = 'Thomas';
+          sensorNode.parentNode.insertBefore(thomas, sensorNode.nextSibling);
+          obs.disconnect();
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+  </script>
 </body>
 </html>
