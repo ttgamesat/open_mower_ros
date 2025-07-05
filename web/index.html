@@ -39,9 +39,21 @@
       const observer = new MutationObserver(function(_, obs) {
         const elements = Array.from(document.querySelectorAll('*'));
         const sensorNode = elements.find(el => el.textContent && el.textContent.trim() === 'Sensor Values');
+        const dashboardNode = elements.find(el => el.textContent && el.textContent.trim() === 'Dashboard');
         if (sensorNode && sensorNode.parentNode) {
           const thomas = sensorNode.cloneNode(true);
           thomas.textContent = 'Thomas';
+          if (dashboardNode) {
+            if ('href' in dashboardNode) {
+              thomas.href = dashboardNode.href;
+            } else {
+              const dAnchor = dashboardNode.querySelector('a');
+              const tAnchor = thomas.querySelector('a');
+              if (dAnchor && tAnchor) {
+                tAnchor.href = dAnchor.href;
+              }
+            }
+          }
           sensorNode.parentNode.insertBefore(thomas, sensorNode.nextSibling);
           obs.disconnect();
         }
